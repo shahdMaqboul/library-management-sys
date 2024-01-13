@@ -25,4 +25,5 @@ public class BookEntity {
     @Column(unique = true)
     private String isbn;
 
+    private Boolean borrowed;
 }

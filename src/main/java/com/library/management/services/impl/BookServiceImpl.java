@@ -30,6 +30,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto save(BookDto bookDto) {
         BookEntity bookEntity = bookMapper.mapEntityFromDto(bookDto);
+        bookEntity.setBorrowed(false);
 
         return  bookMapper.mapEntityToDto(bookRepository.save(bookEntity));
     }
@@ -85,6 +86,13 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteAll() {
         bookRepository.deleteAll();
+    }
+
+    @Override
+    public boolean isBorrowed(Long bookId){
+        Optional<BookEntity> bookEntity = bookRepository.findById(bookId);
+        return bookEntity.isPresent() && bookEntity.get().getBorrowed() == true;
+
     }
 }
 

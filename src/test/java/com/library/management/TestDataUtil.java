@@ -16,6 +16,7 @@ public final class TestDataUtil {
                 .author("Sila Sea")
                 .publicationYear(2005)
                 .isbn("9781234567890")
+                .borrowed(false)
                 .build();
     }
 
@@ -26,6 +27,7 @@ public final class TestDataUtil {
                 .author("Sila Sea")
                 .publicationYear(2005)
                 .isbn("9781234567890")
+                .borrowed(false)
                 .build();
     }
 
@@ -36,6 +38,7 @@ public final class TestDataUtil {
                 .author("John Writer")
                 .publicationYear(2010)
                 .isbn("9782345678901")
+                .borrowed(false)
                 .build();
     }
 
@@ -46,6 +49,7 @@ public final class TestDataUtil {
                 .author("John Writer")
                 .publicationYear(2010)
                 .isbn("9782345678901")
+                .borrowed(false)
                 .build();
     }
 
@@ -56,6 +60,7 @@ public final class TestDataUtil {
                 .author("Emma Reader")
                 .publicationYear(2018)
                 .isbn("9783456789012")
+                .borrowed(false)
                 .build();
     }
 
@@ -66,6 +71,7 @@ public final class TestDataUtil {
                 .author("Emma Reader")
                 .publicationYear(2018)
                 .isbn("9783456789012")
+                .borrowed(false)
                 .build();
     }
 

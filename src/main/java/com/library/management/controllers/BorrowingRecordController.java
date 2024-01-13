@@ -38,6 +38,9 @@ public class BorrowingRecordController {
         if (!patronService.isExists(patronId)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        if(bookService.isBorrowed(bookId) == true){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
 
         BorrowingRecordDto borrowingRecordDto = borrowingRecordService.borrowBook(bookId, patronId);
         return new ResponseEntity<>(borrowingRecordDto, HttpStatus.CREATED);

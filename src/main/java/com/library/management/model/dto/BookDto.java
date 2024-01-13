@@ -29,4 +29,6 @@ public class BookDto {
     @NotBlank(message = "isbn is mandatory")
     @NotNull(message = "isbn is mandatory")
     private String isbn;
+
+    private Boolean borrowed;
 }

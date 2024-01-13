@@ -47,6 +47,9 @@ public class BorrowingRecordServiceImpl implements BorrowingRecordService {
         borrowingRecordEntity.setPatron(patronEntity);
         borrowingRecordEntity.setBorrowingDate(LocalDate.now());
 
+        bookEntity.setBorrowed(true);
+        bookRepository.save(bookEntity);
+
         return borrowingRecordMapper.mapEntityToDto(borrowingRecordRepository.save(borrowingRecordEntity));
     }
 
@@ -61,8 +64,18 @@ public class BorrowingRecordServiceImpl implements BorrowingRecordService {
         Optional<BorrowingRecordEntity> borrowingRecordOptional = borrowingRecordRepository
                 .findByBookAndPatronAndReturnDateIsNull(bookEntity, patronEntity);
 
+//        return borrowingRecordOptional.map(borrowingRecordEntity -> {
+//            borrowingRecordEntity.setReturnDate(LocalDate.now());
+//            return borrowingRecordMapper.mapEntityToDto(borrowingRecordRepository.save(borrowingRecordEntity));
+//        }).orElseThrow(() -> new RuntimeException("Borrowing record not found"));
+
         return borrowingRecordOptional.map(borrowingRecordEntity -> {
             borrowingRecordEntity.setReturnDate(LocalDate.now());
+
+            bookEntity.setBorrowed(false);
+            bookRepository.save(bookEntity);
+
+
             return borrowingRecordMapper.mapEntityToDto(borrowingRecordRepository.save(borrowingRecordEntity));
         }).orElseThrow(() -> new RuntimeException("Borrowing record not found"));
     }

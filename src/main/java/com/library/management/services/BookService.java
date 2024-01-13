@@ -20,4 +20,6 @@ public interface BookService {
     void delete(Long id);
 
     void deleteAll();
+
+    boolean isBorrowed(Long bookId);
 }

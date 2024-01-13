@@ -53,8 +53,8 @@ public class BookControllerIntegrationTests {
     @BeforeEach
     public void setUp() {
         // Clear the database or perform any necessary setup
-        bookService.deleteAll();
         borrowingRecordService.deleteAll();
+        bookService.deleteAll();
     }
 
     @Test
@@ -156,11 +156,11 @@ public class BookControllerIntegrationTests {
     @Test
     public void testThatCreateBookWithExistingISBNReturnsHttpConflict() throws Exception {
         // Save a book with the same ISBN first
-        BookDto testBookDtoA = TestDataUtil.createTestBookDtoA();
-        bookService.save(testBookDtoA);
+        BookDto testBookDtoB = TestDataUtil.createTestBookDtoB();
+        bookService.save(testBookDtoB);
 
-        testBookDtoA.setId(null);
-        String bookJson = objectMapper.writeValueAsString(testBookDtoA);
+        testBookDtoB.setId(null);
+        String bookJson = objectMapper.writeValueAsString(testBookDtoB);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/books")
