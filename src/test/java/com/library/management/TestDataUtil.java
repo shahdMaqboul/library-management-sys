@@ -15,7 +15,7 @@ public final class TestDataUtil {
                 .title("The Shadow in the Attic")
                 .author("Sila Sea")
                 .publicationYear(2005)
-                .isbn("978-1-2345-6789-0")
+                .isbn("9781234567890")
                 .build();
     }
 
@@ -25,7 +25,7 @@ public final class TestDataUtil {
                 .title("The Shadow in the Attic")
                 .author("Sila Sea")
                 .publicationYear(2005)
-                .isbn("978-1-2345-6789-0")
+                .isbn("9781234567890")
                 .build();
     }
 
@@ -35,7 +35,7 @@ public final class TestDataUtil {
                 .title("Beyond the Horizon")
                 .author("John Writer")
                 .publicationYear(2010)
-                .isbn("978-2-3456-7890-1")
+                .isbn("9782345678901")
                 .build();
     }
 
@@ -45,7 +45,7 @@ public final class TestDataUtil {
                 .title("Beyond the Horizon")
                 .author("John Writer")
                 .publicationYear(2010)
-                .isbn("978-2-3456-7890-1")
+                .isbn("9782345678901")
                 .build();
     }
 
@@ -55,7 +55,7 @@ public final class TestDataUtil {
                 .title("Lost in the Library")
                 .author("Emma Reader")
                 .publicationYear(2018)
-                .isbn("978-3-4567-8901-2")
+                .isbn("9783456789012")
                 .build();
     }
 
@@ -65,7 +65,7 @@ public final class TestDataUtil {
                 .title("Lost in the Library")
                 .author("Emma Reader")
                 .publicationYear(2018)
-                .isbn("978-3-4567-8901-2")
+                .isbn("9783456789012")
                 .build();
     }
 

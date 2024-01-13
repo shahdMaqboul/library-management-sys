@@ -13,6 +13,8 @@ public interface BookService {
 
     boolean isExists(Long id);
 
+    boolean isExists(String isbn);
+
     BookDto updateBook(Long id, BookDto bookDto);
 
     void delete(Long id);

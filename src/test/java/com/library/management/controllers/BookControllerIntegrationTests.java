@@ -154,6 +154,24 @@ public class BookControllerIntegrationTests {
     }
 
     @Test
+    public void testThatCreateBookWithExistingISBNReturnsHttpConflict() throws Exception {
+        // Save a book with the same ISBN first
+        BookDto testBookDtoA = TestDataUtil.createTestBookDtoA();
+        bookService.save(testBookDtoA);
+
+        testBookDtoA.setId(null);
+        String bookJson = objectMapper.writeValueAsString(testBookDtoA);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(bookJson)
+        ).andExpect(
+                MockMvcResultMatchers.status().isConflict()
+        );
+    }
+
+    @Test
     public void testThatUpdateBookReturnsHttpStatus404WhenNoBookExists() throws Exception {
         BookDto testBookDtoA = TestDataUtil.createTestBookDtoA();
         String bookDtoJson = objectMapper.writeValueAsString(testBookDtoA);

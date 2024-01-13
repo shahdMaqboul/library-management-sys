@@ -3,6 +3,7 @@ package com.library.management.controllers;
 import com.library.management.model.dto.BookDto;
 import com.library.management.services.BookService;
 //import jakarta.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -38,8 +39,13 @@ public class BookController {
 
     @PostMapping
     public ResponseEntity<BookDto> createBook(
-//            @Valid
+            @Valid
             @RequestBody BookDto bookDto) {
+
+        if (bookService.isExists(bookDto.getIsbn())) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
         BookDto savedBookDto = bookService.save(bookDto);
         return new ResponseEntity<>(savedBookDto, HttpStatus.CREATED);
     }
@@ -48,6 +54,7 @@ public class BookController {
     public ResponseEntity<BookDto> updateBook(@PathVariable Long id, @RequestBody BookDto bookDto) {
         if (!bookService.isExists(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         }
 
         BookDto savedBookDto = bookService.updateBook(id, bookDto);
@@ -64,18 +71,18 @@ public class BookController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public Map<String, String> handleValidationExceptions(
-//            MethodArgumentNotValidException ex) {
-//        Map<String, String> errors = new HashMap<>();
-//        ex.getBindingResult().getAllErrors().forEach((error) -> {
-//            String fieldName = ((FieldError) error).getField();
-//            String errorMessage = error.getDefaultMessage();
-//            errors.put(fieldName, errorMessage);
-//        });
-//        return errors;
-//    }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }
 }
 
 
