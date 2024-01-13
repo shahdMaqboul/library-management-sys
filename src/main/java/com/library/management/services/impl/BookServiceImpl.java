@@ -5,8 +5,6 @@ import com.library.management.model.dto.BookDto;
 import com.library.management.model.entities.BookEntity;
 import com.library.management.repositories.BookRepository;
 import com.library.management.services.BookService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

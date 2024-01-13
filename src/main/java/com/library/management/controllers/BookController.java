@@ -50,10 +50,9 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookDto> updateBook(@PathVariable Long id, @RequestBody BookDto bookDto) {
+    public ResponseEntity<BookDto> updateBook(@PathVariable Long id, @Valid @RequestBody BookDto bookDto) {
         if (!bookService.isExists(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
         }
 
         BookDto savedBookDto = bookService.updateBook(id, bookDto);
