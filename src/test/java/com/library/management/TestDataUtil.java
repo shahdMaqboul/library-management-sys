@@ -77,7 +77,7 @@ public final class TestDataUtil {
 
     public static PatronEntity createTestPatronEntityA() {
         return PatronEntity.builder()
-                .id(1L)
+                .id(667L)
                 .name("John Doe")
                 .contactInformation("john.doe@example.com")
                 .build();
@@ -85,7 +85,7 @@ public final class TestDataUtil {
 
     public static PatronDto createTestPatronDtoA() {
         return PatronDto.builder()
-                .id(1L)
+                .id(667L)
                 .name("John Doe")
                 .contactInformation("john.doe@example.com")
                 .build();
@@ -93,7 +93,7 @@ public final class TestDataUtil {
 
     public static PatronEntity createTestPatronEntityB() {
         return PatronEntity.builder()
-                .id(2L)
+                .id(668L)
                 .name("Jane Smith")
                 .contactInformation("jane.smith@example.com")
                 .build();
@@ -101,7 +101,7 @@ public final class TestDataUtil {
 
     public static PatronDto createTestPatronDtoB() {
         return PatronDto.builder()
-                .id(2L)
+                .id(668L)
                 .name("Jane Smith")
                 .contactInformation("jane.smith@example.com")
                 .build();
@@ -109,7 +109,7 @@ public final class TestDataUtil {
 
     public static PatronEntity createTestPatronEntityC() {
         return PatronEntity.builder()
-                .id(3L)
+                .id(669L)
                 .name("Bob Johnson")
                 .contactInformation("bob.johnson@example.com")
                 .build();
@@ -117,7 +117,7 @@ public final class TestDataUtil {
 
     public static PatronDto createTestPatronDtoC() {
         return PatronDto.builder()
-                .id(3L)
+                .id(669L)
                 .name("Bob Johnson")
                 .contactInformation("bob.johnson@example.com")
                 .build();

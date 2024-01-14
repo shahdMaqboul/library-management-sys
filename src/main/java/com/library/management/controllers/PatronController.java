@@ -45,7 +45,7 @@ public class PatronController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PatronDto> updatePatron(@PathVariable Long id, @RequestBody PatronDto patronDto) {
+    public ResponseEntity<PatronDto> updatePatron(@PathVariable Long id, @Valid @RequestBody PatronDto patronDto) {
         if (!patronService.isExists(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
