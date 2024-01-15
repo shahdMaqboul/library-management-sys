@@ -10,6 +10,7 @@ import com.library.management.repositories.BorrowingRecordRepository;
 import com.library.management.repositories.PatronRepository;
 import com.library.management.services.BorrowingRecordService;
 import jakarta.transaction.Transactional;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -37,6 +38,7 @@ public class BorrowingRecordServiceImpl implements BorrowingRecordService {
 
     @Override
     @Transactional
+    @CacheEvict(value = {"bookList", "findBookById"}, allEntries = true)
     public BorrowingRecordDto borrowBook(Long bookId, Long patronId) {
         BookEntity bookEntity = bookRepository.findById(bookId)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
@@ -57,6 +59,7 @@ public class BorrowingRecordServiceImpl implements BorrowingRecordService {
 
     @Override
     @Transactional
+    @CacheEvict(value = {"bookList", "findBookById"}, allEntries = true)
     public BorrowingRecordDto returnBook(Long bookId, Long patronId) {
         BookEntity bookEntity = bookRepository.findById(bookId)
                 .orElseThrow(() -> new RuntimeException("Book not found"));

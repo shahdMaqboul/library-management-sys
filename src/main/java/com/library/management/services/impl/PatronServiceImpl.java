@@ -5,7 +5,8 @@ import com.library.management.model.dto.PatronDto;
 import com.library.management.model.entities.PatronEntity;
 import com.library.management.repositories.PatronRepository;
 import com.library.management.services.PatronService;
-import jakarta.transaction.Transactional;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,12 +26,14 @@ public class PatronServiceImpl implements PatronService {
     }
 
     @Override
+    @CacheEvict(value = "patronList", allEntries = true)
     public PatronDto save(PatronDto patronDto) {
         PatronEntity patronEntity = patronMapper.mapEntityFromDto(patronDto);
         return patronMapper.mapEntityToDto(patronRepository.save(patronEntity));
     }
 
     @Override
+    @Cacheable(value = "patronList", key = "#root.methodName")
     public List<PatronDto> findAll() {
         List<PatronEntity> patrons =  StreamSupport.stream(patronRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
@@ -41,6 +44,7 @@ public class PatronServiceImpl implements PatronService {
     }
 
     @Override
+    @Cacheable(value = "findPatronById", key = "#id")
     public Optional<PatronDto> findOne(Long id) {
         Optional<PatronEntity> foundBook = patronRepository.findById(id);
 
@@ -53,6 +57,7 @@ public class PatronServiceImpl implements PatronService {
     }
 
     @Override
+    @CacheEvict(value = {"patronList", "findPatronById"}, allEntries = true)
     public PatronDto updatePatron(Long id, PatronDto patronDto) {
         if (!patronRepository.existsById(id)) {
             throw new RuntimeException("Patron does not exist");
@@ -64,11 +69,13 @@ public class PatronServiceImpl implements PatronService {
     }
 
     @Override
+    @CacheEvict(value = {"patronList", "findPatronById"}, allEntries = true)
     public void delete(Long id) {
         patronRepository.deleteById(id);
     }
 
     @Override
+    @CacheEvict(value = {"patronList", "findPatronById"}, allEntries = true)
     public void deleteAll() {
         patronRepository.deleteAll();
     }

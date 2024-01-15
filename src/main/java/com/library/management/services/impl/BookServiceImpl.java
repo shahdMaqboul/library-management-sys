@@ -5,7 +5,8 @@ import com.library.management.model.dto.BookDto;
 import com.library.management.model.entities.BookEntity;
 import com.library.management.repositories.BookRepository;
 import com.library.management.services.BookService;
-import jakarta.transaction.Transactional;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @CacheEvict(value = "bookList", allEntries = true)
     public BookDto save(BookDto bookDto) {
         BookEntity bookEntity = bookMapper.mapEntityFromDto(bookDto);
         bookEntity.setBorrowed(false);
@@ -35,6 +37,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Cacheable(value = "bookList", key = "#root.methodName")
     public List<BookDto> findAll() {
         List<BookEntity> books =
                 StreamSupport.stream(
@@ -47,6 +50,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Cacheable(value = "findBookById", key = "#id")
     public Optional<BookDto> findOne(Long id) {
         Optional<BookEntity> foundBook = bookRepository.findById(id);
 
@@ -67,6 +71,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @CacheEvict(value = {"bookList", "findBookById"}, allEntries = true)
     public BookDto updateBook(Long id, BookDto bookDto) {
         if (!bookRepository.existsById(id)) {
             throw new RuntimeException("Book does not exist");
@@ -78,11 +83,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @CacheEvict(value = {"bookList", "findBookById"}, allEntries = true)
     public void delete(Long id) {
         bookRepository.deleteById(id);
     }
 
     @Override
+    @CacheEvict(value = {"bookList", "findBookById"}, allEntries = true)
     public void deleteAll() {
         bookRepository.deleteAll();
     }
