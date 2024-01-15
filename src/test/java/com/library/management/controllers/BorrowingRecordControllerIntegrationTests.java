@@ -44,7 +44,7 @@ public class BorrowingRecordControllerIntegrationTests {
 
     @BeforeEach
     public void setUp() {
-        // Clear the database or perform any necessary setup
+        // Delete all records from borrowing_records, books and patrons
         borrowingRecordService.deleteAll();
         bookService.deleteAll();
         patronService.deleteAll();

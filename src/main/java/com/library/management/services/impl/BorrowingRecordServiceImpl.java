@@ -9,6 +9,7 @@ import com.library.management.repositories.BookRepository;
 import com.library.management.repositories.BorrowingRecordRepository;
 import com.library.management.repositories.PatronRepository;
 import com.library.management.services.BorrowingRecordService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -35,6 +36,7 @@ public class BorrowingRecordServiceImpl implements BorrowingRecordService {
     }
 
     @Override
+    @Transactional
     public BorrowingRecordDto borrowBook(Long bookId, Long patronId) {
         BookEntity bookEntity = bookRepository.findById(bookId)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
@@ -54,6 +56,7 @@ public class BorrowingRecordServiceImpl implements BorrowingRecordService {
     }
 
     @Override
+    @Transactional
     public BorrowingRecordDto returnBook(Long bookId, Long patronId) {
         BookEntity bookEntity = bookRepository.findById(bookId)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
@@ -63,11 +66,6 @@ public class BorrowingRecordServiceImpl implements BorrowingRecordService {
 
         Optional<BorrowingRecordEntity> borrowingRecordOptional = borrowingRecordRepository
                 .findByBookAndPatronAndReturnDateIsNull(bookEntity, patronEntity);
-
-//        return borrowingRecordOptional.map(borrowingRecordEntity -> {
-//            borrowingRecordEntity.setReturnDate(LocalDate.now());
-//            return borrowingRecordMapper.mapEntityToDto(borrowingRecordRepository.save(borrowingRecordEntity));
-//        }).orElseThrow(() -> new RuntimeException("Borrowing record not found"));
 
         return borrowingRecordOptional.map(borrowingRecordEntity -> {
             borrowingRecordEntity.setReturnDate(LocalDate.now());

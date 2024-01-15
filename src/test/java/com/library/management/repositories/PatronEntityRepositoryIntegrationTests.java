@@ -36,7 +36,7 @@ public class PatronEntityRepositoryIntegrationTests {
 
     @BeforeEach
     public void setUp() {
-        // Clean the database, e.g., truncate the table
+        // Delete all records from borrowing_records and patrons
         borrowingRecordRepository.deleteAll();
         underTest.deleteAll();
 

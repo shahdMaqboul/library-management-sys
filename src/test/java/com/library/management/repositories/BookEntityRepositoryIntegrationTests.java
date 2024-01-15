@@ -18,7 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-//@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_CLASS)
 @Transactional
 public class BookEntityRepositoryIntegrationTests {
 
@@ -37,9 +36,8 @@ public class BookEntityRepositoryIntegrationTests {
 
     @BeforeEach
     public void setUp() {
-        // Delete all records from borrowing_records
+        // Delete all records from borrowing_records and books
         borrowingRecordRepository.deleteAll();
-//        // Clean the database, e.g., truncate the table
         underTest.deleteAll();
     }
 
@@ -54,27 +52,18 @@ public class BookEntityRepositoryIntegrationTests {
 
     @Test
     public void testThatMultipleBooksCanBeCreatedAndRecalled() {
-//        System.out.println("11 " +underTest.findAll());
-//        System.out.println("22 " +borrowingRecordRepository.findAll());
-//        BookEntity bookEntityA = TestDataUtil.createTestBookEntityA();
-//        System.out.println("1 " + underTest.save(bookEntityA));
-//        System.out.println("2 " +underTest.findAll());
-
         BookEntity bookEntityB = TestDataUtil.createTestBookEntityB();
-//        underTest.save(bookEntityB);
-        System.out.println("3 " +underTest.save(bookEntityB));
-        System.out.println(underTest.findAll());
+        underTest.save(bookEntityB);
+        underTest.findAll();
 
         BookEntity bookEntityC = TestDataUtil.createTestBookEntityC();
-//        underTest.save(bookEntityC);
-        System.out.println(underTest.save(bookEntityC));
-        System.out.println(underTest.findAll());
+        underTest.save(bookEntityC);
+        underTest.findAll();
 
         Iterable<BookEntity> result = underTest.findAll();
         assertThat(result)
                 .hasSize(2)
                 .containsExactly(
-//                        bookEntityA,
                         bookEntityB, bookEntityC);
     }
 

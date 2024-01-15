@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureMockMvc
 @Transactional
-
 public class PatronControllerIntegrationTests {
 
     @Autowired
@@ -41,7 +40,7 @@ public class PatronControllerIntegrationTests {
 
     @BeforeEach
     public void setUp() {
-        // Clear the database or perform any necessary setup
+        // Delete all records from borrowing_records and patrons
         patronService.deleteAll();
         borrowingRecordService.deleteAll();
     }

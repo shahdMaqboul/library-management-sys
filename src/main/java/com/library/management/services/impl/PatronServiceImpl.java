@@ -2,10 +2,10 @@ package com.library.management.services.impl;
 
 import com.library.management.mappers.Mapper;
 import com.library.management.model.dto.PatronDto;
-import com.library.management.model.entities.BookEntity;
 import com.library.management.model.entities.PatronEntity;
 import com.library.management.repositories.PatronRepository;
 import com.library.management.services.PatronService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

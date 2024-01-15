@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -38,7 +37,7 @@ public class BorrowingRecordEntityRepositoryIntegrationTests {
 
     @BeforeEach
     public void setUp() {
-        // Clean the database, e.g., truncate the table
+        // Delete all records from borrowing_records, books and patrons
         underTest.deleteAll();
         bookRepository.deleteAll();
         patronRepository.deleteAll();
