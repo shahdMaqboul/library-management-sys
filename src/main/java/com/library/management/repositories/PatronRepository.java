@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PatronRepository extends JpaRepository<PatronEntity, Long> {
-    // Additional custom methods if needed
+
 }
 

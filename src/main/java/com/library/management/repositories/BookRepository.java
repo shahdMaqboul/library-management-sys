@@ -8,7 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<BookEntity, Long> {
-    // Additional custom methods if needed
     Optional<BookEntity> findByIsbn(String isbn);
 }
 
