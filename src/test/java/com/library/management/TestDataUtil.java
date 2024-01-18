@@ -1,9 +1,13 @@
 package com.library.management;
 
 import com.library.management.model.dto.BookDto;
+import com.library.management.model.dto.BorrowingRecordDto;
 import com.library.management.model.dto.PatronDto;
 import com.library.management.model.entities.BookEntity;
+import com.library.management.model.entities.BorrowingRecordEntity;
 import com.library.management.model.entities.PatronEntity;
+
+import java.time.LocalDate;
 
 public final class TestDataUtil {
     private TestDataUtil(){
@@ -120,6 +124,30 @@ public final class TestDataUtil {
                 .id(669L)
                 .name("Bob Johnson")
                 .contactInformation("bob.johnson@example.com")
+                .build();
+    }
+
+    public static BorrowingRecordEntity createTestBorrowingRecordEntityA() {
+        return BorrowingRecordEntity.builder()
+                .id(669L)
+                .book(createTestBookEntityA())
+                .patron(createTestPatronEntityA())
+                .borrowingDate(LocalDate.of(2022, 1, 1))
+//                .returnDate(LocalDate.of(2022, 1, 2))
+//                .borrowingDate(null)
+                .returnDate(null)
+                .build();
+    }
+
+    public static BorrowingRecordDto createTestBorrowingRecordDtoA() {
+        return BorrowingRecordDto.builder()
+                .id(669L)
+                .book(createTestBookDtoA())
+                .patron(createTestPatronDtoA())
+                .borrowingDate(LocalDate.of(2022, 1, 1))
+//                .returnDate(LocalDate.of(2022, 1, 2))
+//                .borrowingDate(null)
+                .returnDate(null)
                 .build();
     }
 }

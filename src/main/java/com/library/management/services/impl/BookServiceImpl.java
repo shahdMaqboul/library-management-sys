@@ -85,6 +85,10 @@ public class BookServiceImpl implements BookService {
     @Override
     @CacheEvict(value = {"bookList", "findBookById"}, allEntries = true)
     public void delete(Long id) {
+        if (!bookRepository.existsById(id)) {
+            throw new RuntimeException("Book does not exist");
+        }
+
         bookRepository.deleteById(id);
     }
 

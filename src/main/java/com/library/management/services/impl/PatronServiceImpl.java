@@ -71,6 +71,10 @@ public class PatronServiceImpl implements PatronService {
     @Override
     @CacheEvict(value = {"patronList", "findPatronById"}, allEntries = true)
     public void delete(Long id) {
+        if (!patronRepository.existsById(id)) {
+            throw new RuntimeException("Patron does not exist");
+        }
+
         patronRepository.deleteById(id);
     }
 

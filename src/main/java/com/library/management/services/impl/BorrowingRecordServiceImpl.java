@@ -54,7 +54,8 @@ public class BorrowingRecordServiceImpl implements BorrowingRecordService {
         bookEntity.setBorrowed(true);
         bookRepository.save(bookEntity);
 
-        return borrowingRecordMapper.mapEntityToDto(borrowingRecordRepository.save(borrowingRecordEntity));
+        BorrowingRecordEntity book = borrowingRecordRepository.save(borrowingRecordEntity);
+        return borrowingRecordMapper.mapEntityToDto(book);
     }
 
     @Override
