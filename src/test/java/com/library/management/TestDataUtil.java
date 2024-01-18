@@ -133,8 +133,6 @@ public final class TestDataUtil {
                 .book(createTestBookEntityA())
                 .patron(createTestPatronEntityA())
                 .borrowingDate(LocalDate.of(2022, 1, 1))
-//                .returnDate(LocalDate.of(2022, 1, 2))
-//                .borrowingDate(null)
                 .returnDate(null)
                 .build();
     }
@@ -145,8 +143,6 @@ public final class TestDataUtil {
                 .book(createTestBookDtoA())
                 .patron(createTestPatronDtoA())
                 .borrowingDate(LocalDate.of(2022, 1, 1))
-//                .returnDate(LocalDate.of(2022, 1, 2))
-//                .borrowingDate(null)
                 .returnDate(null)
                 .build();
     }
