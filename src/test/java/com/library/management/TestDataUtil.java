@@ -15,7 +15,6 @@ public final class TestDataUtil {
 
     public static BookEntity createTestBookEntityA() {
         return BookEntity.builder()
-                .id(1L)
                 .title("The Shadow in the Attic")
                 .author("Sila Sea")
                 .publicationYear(2005)
@@ -26,7 +25,6 @@ public final class TestDataUtil {
 
     public static BookDto createTestBookDtoA() {
         return BookDto.builder()
-                .id(1L)
                 .title("The Shadow in the Attic")
                 .author("Sila Sea")
                 .publicationYear(2005)
@@ -37,7 +35,6 @@ public final class TestDataUtil {
 
     public static BookEntity createTestBookEntityB() {
         return BookEntity.builder()
-                .id(2L)
                 .title("Beyond the Horizon")
                 .author("John Writer")
                 .publicationYear(2010)
@@ -48,7 +45,6 @@ public final class TestDataUtil {
 
     public static BookDto createTestBookDtoB() {
         return BookDto.builder()
-                .id(2L)
                 .title("Beyond the Horizon")
                 .author("John Writer")
                 .publicationYear(2010)
@@ -59,7 +55,6 @@ public final class TestDataUtil {
 
     public static BookEntity createTestBookEntityC() {
         return BookEntity.builder()
-                .id(3L)
                 .title("Lost in the Library")
                 .author("Emma Reader")
                 .publicationYear(2018)
@@ -70,7 +65,6 @@ public final class TestDataUtil {
 
     public static BookDto createTestBookDtoC() {
         return BookDto.builder()
-                .id(3L)
                 .title("Lost in the Library")
                 .author("Emma Reader")
                 .publicationYear(2018)
@@ -81,7 +75,6 @@ public final class TestDataUtil {
 
     public static PatronEntity createTestPatronEntityA() {
         return PatronEntity.builder()
-                .id(667L)
                 .name("John Doe")
                 .contactInformation("john.doe@example.com")
                 .build();
@@ -89,7 +82,6 @@ public final class TestDataUtil {
 
     public static PatronDto createTestPatronDtoA() {
         return PatronDto.builder()
-                .id(667L)
                 .name("John Doe")
                 .contactInformation("john.doe@example.com")
                 .build();
@@ -97,7 +89,6 @@ public final class TestDataUtil {
 
     public static PatronEntity createTestPatronEntityB() {
         return PatronEntity.builder()
-                .id(668L)
                 .name("Jane Smith")
                 .contactInformation("jane.smith@example.com")
                 .build();
@@ -105,7 +96,6 @@ public final class TestDataUtil {
 
     public static PatronDto createTestPatronDtoB() {
         return PatronDto.builder()
-                .id(668L)
                 .name("Jane Smith")
                 .contactInformation("jane.smith@example.com")
                 .build();
@@ -113,7 +103,6 @@ public final class TestDataUtil {
 
     public static PatronEntity createTestPatronEntityC() {
         return PatronEntity.builder()
-                .id(669L)
                 .name("Bob Johnson")
                 .contactInformation("bob.johnson@example.com")
                 .build();
@@ -121,7 +110,6 @@ public final class TestDataUtil {
 
     public static PatronDto createTestPatronDtoC() {
         return PatronDto.builder()
-                .id(669L)
                 .name("Bob Johnson")
                 .contactInformation("bob.johnson@example.com")
                 .build();
@@ -129,7 +117,6 @@ public final class TestDataUtil {
 
     public static BorrowingRecordEntity createTestBorrowingRecordEntityA() {
         return BorrowingRecordEntity.builder()
-                .id(669L)
                 .book(createTestBookEntityA())
                 .patron(createTestPatronEntityA())
                 .borrowingDate(LocalDate.of(2022, 1, 1))
@@ -139,7 +126,6 @@ public final class TestDataUtil {
 
     public static BorrowingRecordDto createTestBorrowingRecordDtoA() {
         return BorrowingRecordDto.builder()
-                .id(669L)
                 .book(createTestBookDtoA())
                 .patron(createTestPatronDtoA())
                 .borrowingDate(LocalDate.of(2022, 1, 1))

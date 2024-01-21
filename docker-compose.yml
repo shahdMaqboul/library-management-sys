@@ -9,3 +9,8 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: changemeinprod!
+    volumes:
+        - pg_data:/var/lib/postgresql/data
+
+volumes:
+  pg_data:

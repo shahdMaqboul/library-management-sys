@@ -26,27 +26,22 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @Transactional
 public class BookControllerIntegrationTests {
-
-    @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
     private BookService bookService;
-
-    @Autowired
     private BorrowingRecordService borrowingRecordService;
 
     @Autowired
     public BookControllerIntegrationTests(
-            MockMvc mockMvc, BookService bookService,
-            BorrowingRecordService borrowingRecordService) {
+            MockMvc mockMvc,
+            BookService bookService,
+            BorrowingRecordService borrowingRecordService,
+            ObjectMapper objectMapper
+    ) {
         this.mockMvc = mockMvc;
         this.bookService = bookService;
         this.borrowingRecordService=borrowingRecordService;
-        this.objectMapper = new ObjectMapper();
+        this.objectMapper = objectMapper;
     }
 
     @BeforeEach
@@ -75,9 +70,9 @@ public class BookControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$[0].id").isNumber()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].title").value("Beyond the Horizon")
+                MockMvcResultMatchers.jsonPath("$[0].title").value(testBookDtoB.getTitle())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].author").value("John Writer")
+                MockMvcResultMatchers.jsonPath("$[0].author").value(testBookDtoB.getAuthor())
         );
     }
 
@@ -104,9 +99,9 @@ public class BookControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.id").value(savedBookDto.getId())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.title").value("The Shadow in the Attic")
+                MockMvcResultMatchers.jsonPath("$.title").value(savedBookDto.getTitle())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.author").value("Sila Sea")
+                MockMvcResultMatchers.jsonPath("$.author").value(savedBookDto.getAuthor())
         );
     }
 
@@ -121,7 +116,6 @@ public class BookControllerIntegrationTests {
     @Test
     public void testThatCreateBookSuccessfullyReturnsHttp201Created() throws Exception {
         BookDto testBookDtoA = TestDataUtil.createTestBookDtoA();
-        testBookDtoA.setId(null);
         String bookJson = objectMapper.writeValueAsString(testBookDtoA);
 
         mockMvc.perform(
@@ -137,7 +131,6 @@ public class BookControllerIntegrationTests {
     @Test
     public void testThatCreateBookSuccessfullyReturnsSavedBook() throws Exception {
         BookDto testBookDtoA = TestDataUtil.createTestBookDtoA();
-        testBookDtoA.setId(null);
         String bookJson = objectMapper.writeValueAsString(testBookDtoA);
 
         mockMvc.perform(
@@ -147,9 +140,9 @@ public class BookControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.id").isNumber()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.title").value("The Shadow in the Attic")
+                MockMvcResultMatchers.jsonPath("$.title").value(testBookDtoA.getTitle())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.author").value("Sila Sea")
+                MockMvcResultMatchers.jsonPath("$.author").value(testBookDtoA.getAuthor())
         );
     }
 
@@ -158,8 +151,6 @@ public class BookControllerIntegrationTests {
         // Save a book with the same ISBN first
         BookDto testBookDtoB = TestDataUtil.createTestBookDtoB();
         bookService.save(testBookDtoB);
-
-        testBookDtoB.setId(null);
         String bookJson = objectMapper.writeValueAsString(testBookDtoB);
 
         mockMvc.perform(
@@ -174,6 +165,7 @@ public class BookControllerIntegrationTests {
     @Test
     public void testThatUpdateBookReturnsHttpStatus404WhenNoBookExists() throws Exception {
         BookDto testBookDtoA = TestDataUtil.createTestBookDtoA();
+        testBookDtoA.setId(1L);
         String bookDtoJson = objectMapper.writeValueAsString(testBookDtoA);
 
         mockMvc.perform(

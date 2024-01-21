@@ -26,17 +26,23 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PatronControllerIntegrationTests {
 
-    @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
     private PatronService patronService;
+    private BorrowingRecordService borrowingRecordService;
 
     @Autowired
-    private BorrowingRecordService borrowingRecordService;
+    public PatronControllerIntegrationTests(
+            MockMvc mockMvc,
+            ObjectMapper objectMapper,
+            PatronService patronService,
+            BorrowingRecordService borrowingRecordService
+    ) {
+        this.mockMvc = mockMvc;
+        this.objectMapper = objectMapper;
+        this.patronService=patronService;
+        this.borrowingRecordService = borrowingRecordService;
+    }
 
     @BeforeEach
     public void setUp() {
@@ -64,9 +70,9 @@ public class PatronControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$[0].id").isNumber()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].name").value("John Doe")
+                MockMvcResultMatchers.jsonPath("$[0].name").value(testPatronDto.getName())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].contactInformation").value("john.doe@example.com")
+                MockMvcResultMatchers.jsonPath("$[0].contactInformation").value(testPatronDto.getContactInformation())
         );
     }
 
@@ -92,9 +98,9 @@ public class PatronControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.id").value(savedPatronDto.getId())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.name").value("John Doe")
+                MockMvcResultMatchers.jsonPath("$.name").value(testPatronDto.getName())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.contactInformation").value("john.doe@example.com")
+                MockMvcResultMatchers.jsonPath("$.contactInformation").value(testPatronDto.getContactInformation())
         );
     }
 
@@ -109,7 +115,6 @@ public class PatronControllerIntegrationTests {
     @Test
     public void testThatCreatePatronSuccessfullyReturnsHttp201Created() throws Exception {
         PatronDto testPatronDto = TestDataUtil.createTestPatronDtoA();
-        testPatronDto.setId(null);
         String patronJson = objectMapper.writeValueAsString(testPatronDto);
 
         mockMvc.perform(
@@ -124,7 +129,6 @@ public class PatronControllerIntegrationTests {
     @Test
     public void testThatCreatePatronSuccessfullyReturnsSavedPatron() throws Exception {
         PatronDto testPatronDto = TestDataUtil.createTestPatronDtoA();
-        testPatronDto.setId(null);
         String patronJson = objectMapper.writeValueAsString(testPatronDto);
 
         mockMvc.perform(
@@ -134,15 +138,16 @@ public class PatronControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.id").isNumber()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.name").value("John Doe")
+                MockMvcResultMatchers.jsonPath("$.name").value(testPatronDto.getName())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.contactInformation").value("john.doe@example.com")
+                MockMvcResultMatchers.jsonPath("$.contactInformation").value(testPatronDto.getContactInformation())
         );
     }
 
     @Test
     public void testThatUpdatePatronReturnsHttpStatus404WhenNoPatronExists() throws Exception {
         PatronDto testPatronDto = TestDataUtil.createTestPatronDtoA();
+        testPatronDto.setId(1L);
         String patronDtoJson = objectMapper.writeValueAsString(testPatronDto);
 
         mockMvc.perform(

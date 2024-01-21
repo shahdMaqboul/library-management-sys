@@ -2,7 +2,6 @@ package com.library.management.controllers;
 
 import com.library.management.model.dto.BorrowingRecordDto;
 import com.library.management.model.dto.PatronDto;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.library.management.model.dto.BookDto;
 import com.library.management.TestDataUtil;
 import com.library.management.services.BookService;
@@ -27,20 +26,23 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 public class BorrowingRecordControllerIntegrationTests {
 
-    @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
     private BorrowingRecordService borrowingRecordService;
-
-    @Autowired
     private BookService bookService;
+    private PatronService patronService;
 
     @Autowired
-    private PatronService patronService;
+    public BorrowingRecordControllerIntegrationTests(
+            MockMvc mockMvc,
+            BorrowingRecordService borrowingRecordService,
+            BookService bookService,
+            PatronService patronService
+    ) {
+        this.mockMvc = mockMvc;
+        this.borrowingRecordService=borrowingRecordService;
+        this.bookService = bookService;
+        this.patronService = patronService;
+    }
 
     @BeforeEach
     public void setUp() {
@@ -80,6 +82,8 @@ public class BorrowingRecordControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.book.id").value(savedBookDto.getId())
         ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.book.borrowed").value(true)
+        ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.patron.id").value(savedPatronDto.getId())
         );
     }
@@ -91,6 +95,31 @@ public class BorrowingRecordControllerIntegrationTests {
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(MockMvcResultMatchers.status().isNotFound());
     }
+
+    @Test
+    public void testThatBorrowBookReturnsHttpStatusConflictWhenBookIsAlreadyBorrowed() throws Exception {
+        // Arrange
+        BookDto testBookDto = TestDataUtil.createTestBookDtoA();
+        PatronDto testPatronDto1 = TestDataUtil.createTestPatronDtoA();
+        PatronDto testPatronDto2 = TestDataUtil.createTestPatronDtoB();
+
+        BookDto savedBookDto = bookService.save(testBookDto);
+        PatronDto savedPatronDto1 = patronService.save(testPatronDto1);
+        PatronDto savedPatronDto2 = patronService.save(testPatronDto2);
+
+        // Patron 1 borrows the book
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/borrowing/borrow/{bookId}/patron/{patronId}", savedBookDto.getId(), savedPatronDto1.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isCreated());
+
+        // Attempting to borrow the book again with Patron 2 should result in conflict
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/borrowing/borrow/{bookId}/patron/{patronId}", savedBookDto.getId(), savedPatronDto2.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isConflict());
+    }
+
 
     @Test
     public void testThatReturnBookReturnsHttpStatus200() throws Exception {
@@ -124,16 +153,35 @@ public class BorrowingRecordControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.book.id").value(savedBookDto.getId())
         ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.book.borrowed").value(false)
+        ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.patron.id").value(savedPatronDto.getId())
         );
     }
 
     @Test
-    public void testThatReturnBookReturnsHttpStatus400ForInvalidReturn() throws Exception {
+    public void testThatReturnBookReturnsHttpStatus400WhenNoBookAndNoPatronExists() throws Exception {
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/borrowing/return/999/patron/999")
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(MockMvcResultMatchers.status().isNotFound());
     }
+
+    @Test
+    public void testThatReturnBookReturnsHttpStatusConflictWhenBookIsNotBorrowed() throws Exception {
+        // Arrange
+        BookDto testBookDto = TestDataUtil.createTestBookDtoA();
+        PatronDto testPatronDto = TestDataUtil.createTestPatronDtoA();
+
+        BookDto savedBookDto = bookService.save(testBookDto);
+        PatronDto savedPatronDto = patronService.save(testPatronDto);
+
+        // Attempting to return a book that is not borrowed should result in conflict
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/borrowing/return/{bookId}/patron/{patronId}", savedBookDto.getId(), savedPatronDto.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isConflict());
+    }
+
 
 }
