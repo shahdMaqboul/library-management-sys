@@ -49,6 +49,7 @@ public class PatronController {
         if (!patronService.isExists(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        patronDto.setId(id);
 
         PatronDto savedPatronDto = patronService.save(patronDto);
         return new ResponseEntity<>(savedPatronDto, HttpStatus.OK);

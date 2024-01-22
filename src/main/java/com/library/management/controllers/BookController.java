@@ -54,6 +54,7 @@ public class BookController {
         if (!bookService.isExists(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        bookDto.setId(id);
 
         BookDto savedBookDto = bookService.updateBook(id, bookDto);
         return new ResponseEntity<>(savedBookDto, HttpStatus.OK);
