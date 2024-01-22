@@ -41,14 +41,14 @@ public class PatronServiceImplTests {
 
     @Test
     public void testSavePatron() {
-        // Arrange
+        // Given
         PatronDto inputPatronDto = TestDataUtil.createTestPatronDtoA();
         PatronEntity savedPatronEntity = TestDataUtil.createTestPatronEntityA();
         Mockito.when(patronMapper.mapEntityFromDto(inputPatronDto)).thenReturn(savedPatronEntity);
         Mockito.when(patronRepository.save(savedPatronEntity)).thenReturn(savedPatronEntity);
         Mockito.when(patronMapper.mapEntityToDto(savedPatronEntity)).thenReturn(inputPatronDto);
 
-        // Act
+        // When
         PatronDto result = patronService.save(inputPatronDto);
 
         // Assert
@@ -58,7 +58,7 @@ public class PatronServiceImplTests {
 
     @Test
     public void testFindAllPatrons() {
-        // Arrange
+        // Given
         List<PatronEntity> patronEntities = Arrays.asList(
                 TestDataUtil.createTestPatronEntityA(),
                 TestDataUtil.createTestPatronEntityB()
@@ -71,27 +71,27 @@ public class PatronServiceImplTests {
         Mockito.when(patronMapper.mapEntityToDto(Mockito.any(PatronEntity.class)))
                 .thenReturn(expectedPatronDtos.get(0), expectedPatronDtos.get(1));
 
-        // Act
+        // When
         List<PatronDto> result = patronService.findAll();
 
-        // Assert
+        // Then
         Assertions.assertEquals(expectedPatronDtos, result);
         Mockito.verify(patronRepository, Mockito.times(1)).findAll();
     }
 
     @Test
     public void testFindOnePatronById() {
-        // Arrange
+        // Given
         Long patronId = 1L;
         PatronEntity patronEntity = TestDataUtil.createTestPatronEntityA();
         PatronDto expectedPatronDto = TestDataUtil.createTestPatronDtoA();
         Mockito.when(patronRepository.findById(patronId)).thenReturn(Optional.of(patronEntity));
         Mockito.when(patronMapper.mapEntityToDto(patronEntity)).thenReturn(expectedPatronDto);
 
-        // Act
+        // When
         Optional<PatronDto> result = patronService.findOne(patronId);
 
-        // Assert
+        // Then
         Assertions.assertTrue(result.isPresent());
         Assertions.assertEquals(expectedPatronDto, result.get());
         Mockito.verify(patronRepository, Mockito.times(1)).findById(patronId);
@@ -99,77 +99,77 @@ public class PatronServiceImplTests {
 
     @Test
     public void testFindOnePatronByIdNotFound() {
-        // Arrange
+        // Given
         Long patronId = 1L;
         Mockito.when(patronRepository.findById(patronId)).thenReturn(Optional.empty());
 
-        // Act
+        // When
         Optional<PatronDto> result = patronService.findOne(patronId);
 
-        // Assert
+        // Then
         Assertions.assertTrue(result.isEmpty());
         Mockito.verify(patronRepository, Mockito.times(1)).findById(patronId);
     }
 
     @Test
     public void testIsPatronExists() {
-        // Arrange
+        // Given
         Long patronId = 1L;
         Mockito.when(patronRepository.existsById(patronId)).thenReturn(true);
 
-        // Act
+        // When
         boolean result = patronService.isExists(patronId);
 
-        // Assert
+        // Then
         Assertions.assertTrue(result);
         Mockito.verify(patronRepository, Mockito.times(1)).existsById(patronId);
     }
 
     @Test
     public void testIsPatronNotExists() {
-        // Arrange
+        // Given
         Long patronId = 1L;
         Mockito.when(patronRepository.existsById(patronId)).thenReturn(false);
 
-        // Act
+        // When
         boolean result = patronService.isExists(patronId);
 
-        // Assert
+        // Then
         Assertions.assertFalse(result);
         Mockito.verify(patronRepository, Mockito.times(1)).existsById(patronId);
     }
 
     @Test
     public void testUpdatePatron() {
-        // Arrange
-        Long patronId = 1L;
-        PatronDto updatedPatronDto = TestDataUtil.createTestPatronDtoB();
+        // Given
         PatronEntity existingPatronEntity = TestDataUtil.createTestPatronEntityA();
+        existingPatronEntity.setId(1l);
         PatronEntity updatedPatronEntity = TestDataUtil.createTestPatronEntityB();
+        PatronDto updatedPatronDto = TestDataUtil.createTestPatronDtoB();
 
-        Mockito.when(patronRepository.existsById(patronId)).thenReturn(true);
+        Mockito.when(patronRepository.existsById(existingPatronEntity.getId())).thenReturn(true);
         Mockito.when(patronMapper.mapEntityFromDto(updatedPatronDto)).thenReturn(updatedPatronEntity);
         Mockito.when(patronRepository.save(updatedPatronEntity)).thenReturn(updatedPatronEntity);
         Mockito.when(patronMapper.mapEntityToDto(updatedPatronEntity)).thenReturn(updatedPatronDto);
 
-        // Act
-        PatronDto result = patronService.updatePatron(patronId, updatedPatronDto);
+        // When
+        PatronDto result = patronService.updatePatron(existingPatronEntity.getId(), updatedPatronDto);
 
-        // Assert
+        // Then
         Assertions.assertEquals(updatedPatronDto, result);
-        Mockito.verify(patronRepository, Mockito.times(1)).existsById(patronId);
+        Mockito.verify(patronRepository, Mockito.times(1)).existsById(existingPatronEntity.getId());
         Mockito.verify(patronRepository, Mockito.times(1)).save(updatedPatronEntity);
     }
 
     @Test
     public void testUpdatePatronNotFound() {
-        // Arrange
+        // Given
         Long patronId = 1L;
         PatronDto updatedPatronDto = TestDataUtil.createTestPatronDtoB();
 
         Mockito.when(patronRepository.existsById(patronId)).thenReturn(false);
 
-        // Act & Assert
+        // When & Then
         Assertions.assertThrows(RuntimeException.class, () -> {
             patronService.updatePatron(patronId, updatedPatronDto);
         });
@@ -180,24 +180,24 @@ public class PatronServiceImplTests {
 
     @Test
     public void testDeletePatron() {
-        // Arrange
+        // Given
         Long patronId = 1L;
         Mockito.when(patronRepository.existsById(patronId)).thenReturn(true);
 
-        // Act
+        // When
         patronService.delete(patronId);
 
-        // Assert
+        // Then
         Mockito.verify(patronRepository, Mockito.times(1)).deleteById(patronId);
     }
 
     @Test
     public void testDeletePatronNotFound() {
-        // Arrange
+        // Given
         Long patronId = 1L;
         Mockito.when(patronRepository.existsById(patronId)).thenReturn(false);
 
-        // Act & Assert
+        // When & Then
         Assertions.assertThrows(RuntimeException.class, () -> {
             patronService.delete(patronId);
         });
@@ -208,10 +208,10 @@ public class PatronServiceImplTests {
 
     @Test
     public void testDeleteAllPatrons() {
-        // Act
+        // When
         patronService.deleteAll();
 
-        // Assert
+        // Then
         Mockito.verify(patronRepository, Mockito.times(1)).deleteAll();
     }
 }

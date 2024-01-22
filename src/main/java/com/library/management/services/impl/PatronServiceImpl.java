@@ -36,7 +36,7 @@ public class PatronServiceImpl implements PatronService {
     @Cacheable(value = "patronList", key = "#root.methodName")
     public List<PatronDto> findAll() {
         List<PatronEntity> patrons =  StreamSupport.stream(patronRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+                .toList();
 
         return patrons.stream()
                 .map(patronMapper::mapEntityToDto)

@@ -25,7 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Optional;
 import java.time.LocalDate;
 
-@SpringBootTest
+//@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class BorrowingRecordServiceImplTests {
 
@@ -52,7 +52,7 @@ public class BorrowingRecordServiceImplTests {
     @Test
     @Transactional
     public void testBorrowBook() {
-        // Arrange
+        // Given
         Long bookId = 1L;
         Long patronId = 667L;
 
@@ -68,10 +68,10 @@ public class BorrowingRecordServiceImplTests {
         Mockito.when(borrowingRecordMapper.mapEntityToDto(Mockito.any()))
                 .thenReturn(expectedBorrowingRecordDto);
 
-        // Act
+        // When
         BorrowingRecordDto result = borrowingRecordService.borrowBook(bookId, patronId);
 
-        // Assert
+        // Then
         Assertions.assertEquals(expectedBorrowingRecordDto, result);
 
         // Verify
@@ -81,7 +81,7 @@ public class BorrowingRecordServiceImplTests {
 
     @Test
     public void testReturnBook() {
-        // Arrange
+        // Given
         Long bookId = 1L;
         Long patronId = 667L;
 
@@ -97,11 +97,11 @@ public class BorrowingRecordServiceImplTests {
         Mockito.when(borrowingRecordMapper.mapEntityToDto(Mockito.any()))
                 .thenReturn(expectedBorrowingRecordDto);
 
-        // Act
+        // When
         BorrowingRecordDto result = borrowingRecordService.returnBook(bookId, patronId);
         System.out.println("result = "+result);
 
-        // Assert
+        // Then
         Assertions.assertEquals(expectedBorrowingRecordDto, result);
         Mockito.verify(bookRepository, Mockito.times(1)).save(bookEntity);
         Mockito.verify(borrowingRecordRepository, Mockito.times(1)).save(borrowingRecordEntity);
@@ -109,7 +109,7 @@ public class BorrowingRecordServiceImplTests {
 
     @Test
     public void testReturnBookRecordNotFound() {
-        // Arrange
+        // Given
         Long bookId = 1L;
         Long patronId = 1L;
 
@@ -121,7 +121,7 @@ public class BorrowingRecordServiceImplTests {
         Mockito.when(borrowingRecordRepository.findByBookAndPatronAndReturnDateIsNull(bookEntity, patronEntity))
                 .thenReturn(Optional.empty());
 
-        // Act & Assert
+        // When & Then
         Assertions.assertThrows(RuntimeException.class, () -> {
             borrowingRecordService.returnBook(bookId, patronId);
         });
@@ -132,10 +132,10 @@ public class BorrowingRecordServiceImplTests {
 
     @Test
     public void testDeleteAllBorrowingRecords() {
-        // Act
+        // When
         borrowingRecordService.deleteAll();
 
-        // Assert
+        // Then
         Mockito.verify(borrowingRecordRepository, Mockito.times(1)).deleteAll();
     }
 }

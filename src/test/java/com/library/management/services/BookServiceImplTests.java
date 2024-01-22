@@ -41,7 +41,7 @@ public class BookServiceImplTests {
 
     @Test
     public void testSaveBook() {
-        // Arrange
+        // Given
         BookDto inputBookDto = TestDataUtil.createTestBookDtoA();
         BookEntity savedBookEntity = TestDataUtil.createTestBookEntityA();
         Mockito.when(bookMapper.mapEntityFromDto(inputBookDto)).thenReturn(savedBookEntity);
@@ -58,7 +58,7 @@ public class BookServiceImplTests {
 
     @Test
     public void testFindAllBooks() {
-        // Arrange
+        // Given
         List<BookEntity> bookEntities = Arrays.asList(
                 TestDataUtil.createTestBookEntityA(),
                 TestDataUtil.createTestBookEntityB()
@@ -71,27 +71,27 @@ public class BookServiceImplTests {
         Mockito.when(bookMapper.mapEntityToDto(Mockito.any(BookEntity.class)))
                 .thenReturn(expectedBookDtos.get(0), expectedBookDtos.get(1));
 
-        // Act
+        // When
         List<BookDto> result = bookService.findAll();
 
-        // Assert
+        // Then
         Assertions.assertEquals(expectedBookDtos, result);
         Mockito.verify(bookRepository, Mockito.times(1)).findAll();
     }
 
     @Test
     public void testFindOneBookById() {
-        // Arrange
+        // Given
         Long bookId = 1L;
         BookEntity bookEntity = TestDataUtil.createTestBookEntityA();
         BookDto expectedBookDto = TestDataUtil.createTestBookDtoA();
         Mockito.when(bookRepository.findById(bookId)).thenReturn(Optional.of(bookEntity));
         Mockito.when(bookMapper.mapEntityToDto(bookEntity)).thenReturn(expectedBookDto);
 
-        // Act
+        // When
         Optional<BookDto> result = bookService.findOne(bookId);
 
-        // Assert
+        // Then
         Assertions.assertTrue(result.isPresent());
         Assertions.assertEquals(expectedBookDto, result.get());
         Mockito.verify(bookRepository, Mockito.times(1)).findById(bookId);
@@ -99,77 +99,77 @@ public class BookServiceImplTests {
 
     @Test
     public void testFindOneBookByIdNotFound() {
-        // Arrange
+        // Given
         Long bookId = 1L;
         Mockito.when(bookRepository.findById(bookId)).thenReturn(Optional.empty());
 
-        // Act
+        // When
         Optional<BookDto> result = bookService.findOne(bookId);
 
-        // Assert
+        // Then
         Assertions.assertTrue(result.isEmpty());
         Mockito.verify(bookRepository, Mockito.times(1)).findById(bookId);
     }
 
     @Test
     public void testIsBookExists() {
-        // Arrange
+        // Given
         Long bookId = 1L;
         Mockito.when(bookRepository.existsById(bookId)).thenReturn(true);
 
-        // Act
+        // When
         boolean result = bookService.isExists(bookId);
 
-        // Assert
+        // Then
         Assertions.assertTrue(result);
         Mockito.verify(bookRepository, Mockito.times(1)).existsById(bookId);
     }
 
     @Test
     public void testIsBookNotExists() {
-        // Arrange
+        // Given
         Long bookId = 1L;
         Mockito.when(bookRepository.existsById(bookId)).thenReturn(false);
 
-        // Act
+        // When
         boolean result = bookService.isExists(bookId);
 
-        // Assert
+        // Then
         Assertions.assertFalse(result);
         Mockito.verify(bookRepository, Mockito.times(1)).existsById(bookId);
     }
 
     @Test
     public void testIsIsbnExists() {
-        // Arrange
+        // Given
         String isbn = "123456789";
         Mockito.when(bookRepository.findByIsbn(isbn)).thenReturn(Optional.of(TestDataUtil.createTestBookEntityA()));
 
-        // Act
+        // When
         boolean result = bookService.isExists(isbn);
 
-        // Assert
+        // Then
         Assertions.assertTrue(result);
         Mockito.verify(bookRepository, Mockito.times(1)).findByIsbn(isbn);
     }
 
     @Test
     public void testIsIsbnNotExists() {
-        // Arrange
+        // Given
         String isbn = "123456789";
         Mockito.when(bookRepository.findByIsbn(isbn)).thenReturn(Optional.empty());
 
-        // Act
+        // When
         boolean result = bookService.isExists(isbn);
 
-        // Assert
+        // Then
         Assertions.assertFalse(result);
         Mockito.verify(bookRepository, Mockito.times(1)).findByIsbn(isbn);
     }
 
     @Test
     public void testUpdateBook() {
-        // Arrange
+        // Given
         Long bookId = 1L;
         BookDto updatedBookDto = TestDataUtil.createTestBookDtoB();
         BookEntity existingBookEntity = TestDataUtil.createTestBookEntityA();
@@ -180,10 +180,10 @@ public class BookServiceImplTests {
         Mockito.when(bookRepository.save(updatedBookEntity)).thenReturn(updatedBookEntity);
         Mockito.when(bookMapper.mapEntityToDto(updatedBookEntity)).thenReturn(updatedBookDto);
 
-        // Act
+        // When
         BookDto result = bookService.updateBook(bookId, updatedBookDto);
 
-        // Assert
+        // Then
         Assertions.assertEquals(updatedBookDto, result);
         Mockito.verify(bookRepository, Mockito.times(1)).existsById(bookId);
         Mockito.verify(bookRepository, Mockito.times(1)).save(updatedBookEntity);
@@ -191,13 +191,13 @@ public class BookServiceImplTests {
 
     @Test
     public void testUpdateBookNotFound() {
-        // Arrange
+        // Given
         Long bookId = 1L;
         BookDto updatedBookDto = TestDataUtil.createTestBookDtoB();
 
         Mockito.when(bookRepository.existsById(bookId)).thenReturn(false);
 
-        // Act & Assert
+        // When & Then
         Assertions.assertThrows(RuntimeException.class, () -> {
             bookService.updateBook(bookId, updatedBookDto);
         });
@@ -208,24 +208,24 @@ public class BookServiceImplTests {
 
     @Test
     public void testDeleteBook() {
-        // Arrange
+        // Given
         Long bookId = 1L;
         Mockito.when(bookRepository.existsById(bookId)).thenReturn(true);
 
-        // Act
+        // When
         bookService.delete(bookId);
 
-        // Assert
+        // Then
         Mockito.verify(bookRepository, Mockito.times(1)).deleteById(bookId);
     }
 
     @Test
     public void testDeleteBookNotFound() {
-        // Arrange
+        // Given
         Long bookId = 1L;
         Mockito.when(bookRepository.existsById(bookId)).thenReturn(false);
 
-        // Act & Assert
+        // When & Then
         Assertions.assertThrows(RuntimeException.class, () -> {
             bookService.delete(bookId);
         });
@@ -236,41 +236,41 @@ public class BookServiceImplTests {
 
     @Test
     public void testDeleteAllBooks() {
-        // Act
+        // When
         bookService.deleteAll();
 
-        // Assert
+        // Then
         Mockito.verify(bookRepository, Mockito.times(1)).deleteAll();
     }
 
     @Test
     public void testIsBookBorrowedTrue() {
-        // Arrange
+        // Given
         Long bookId = 1L;
         BookEntity borrowedBookEntity = TestDataUtil.createTestBookEntityA();
         borrowedBookEntity.setBorrowed(true);
         Mockito.when(bookRepository.findById(bookId)).thenReturn(Optional.of(borrowedBookEntity));
 
-        // Act
+        // When
         boolean result = bookService.isBorrowed(bookId);
 
-        // Assert
+        // Then
         Assertions.assertTrue(result);
         Mockito.verify(bookRepository, Mockito.times(1)).findById(bookId);
     }
 
     @Test
     public void testIsBookBorrowedFalse() {
-        // Arrange
+        // Given
         Long bookId = 1L;
         BookEntity notBorrowedBookEntity = TestDataUtil.createTestBookEntityA();
         notBorrowedBookEntity.setBorrowed(false);
         Mockito.when(bookRepository.findById(bookId)).thenReturn(Optional.of(notBorrowedBookEntity));
 
-        // Act
+        // When
         boolean result = bookService.isBorrowed(bookId);
 
-        // Assert
+        // Then
         Assertions.assertFalse(result);
         Mockito.verify(bookRepository, Mockito.times(1)).findById(bookId);
     }

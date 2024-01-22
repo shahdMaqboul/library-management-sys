@@ -39,13 +39,17 @@ public class PatronEntityRepositoryIntegrationTests {
         // Delete all records from borrowing_records and patrons
         borrowingRecordRepository.deleteAll();
         underTest.deleteAll();
-
     }
 
     @Test
     public void testThatPatronCanBeCreatedAndRecalled() {
+        // Given
         PatronEntity patronEntity = TestDataUtil.createTestPatronEntityA();
+
+        // When
         underTest.save(patronEntity);
+
+        // Then
         Optional<PatronEntity> result = underTest.findById(patronEntity.getId());
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(patronEntity);
@@ -53,33 +57,34 @@ public class PatronEntityRepositoryIntegrationTests {
 
     @Test
     public void testThatMultiplePatronsCanBeCreatedAndRecalled() {
-
+        // Given
         PatronEntity patronEntityA = TestDataUtil.createTestPatronEntityA();
-        underTest.save(patronEntityA);
-
         PatronEntity patronEntityB = TestDataUtil.createTestPatronEntityB();
-        underTest.save(patronEntityB);
-
         PatronEntity patronEntityC = TestDataUtil.createTestPatronEntityC();
+
+        // When
+        underTest.save(patronEntityA);
+        underTest.save(patronEntityB);
         underTest.save(patronEntityC);
 
+        // Then
         Iterable<PatronEntity> result = underTest.findAll();
         assertThat(result)
                 .hasSize(3)
-                .containsExactly(
-                        patronEntityA,
-                        patronEntityB, patronEntityC);
+                .containsExactly(patronEntityA, patronEntityB, patronEntityC);
     }
 
     @Test
     public void testThatPatronCanBeUpdated() {
-
+        // Given
         PatronEntity patronEntityA = TestDataUtil.createTestPatronEntityA();
         underTest.save(patronEntityA);
 
+        // When
         patronEntityA.setName("UPDATED");
         underTest.save(patronEntityA);
 
+        // Then
         Optional<PatronEntity> result = underTest.findById(patronEntityA.getId());
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(patronEntityA);
@@ -87,12 +92,14 @@ public class PatronEntityRepositoryIntegrationTests {
 
     @Test
     public void testThatPatronCanBeDeleted() {
-
+        // Given
         PatronEntity patronEntityB = TestDataUtil.createTestPatronEntityB();
         underTest.save(patronEntityB);
 
+        // When
         underTest.deleteById(patronEntityB.getId());
 
+        // Then
         Optional<PatronEntity> result = underTest.findById(patronEntityB.getId());
         assertThat(result).isEmpty();
     }

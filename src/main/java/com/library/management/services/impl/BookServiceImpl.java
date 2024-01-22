@@ -42,7 +42,7 @@ public class BookServiceImpl implements BookService {
         List<BookEntity> books =
                 StreamSupport.stream(
                         bookRepository.findAll().spliterator(), false
-                        ).collect(Collectors.toList());
+                        ).toList();
 
         return books.stream()
                 .map(bookEntity -> bookMapper.mapEntityToDto(bookEntity))
@@ -64,10 +64,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public boolean isExists(String isbn) {
-         if (bookRepository.findByIsbn(isbn).isEmpty()) {
-             return false;
-        }else
-             return true;
+        return bookRepository.findByIsbn(isbn).isPresent();
     }
 
     @Override

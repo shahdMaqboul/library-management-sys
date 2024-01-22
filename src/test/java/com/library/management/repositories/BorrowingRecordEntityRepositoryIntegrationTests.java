@@ -37,7 +37,7 @@ public class BorrowingRecordEntityRepositoryIntegrationTests {
 
     @BeforeEach
     public void setUp() {
-        // Delete all records from borrowing_records, books and patrons
+        // Delete all records from borrowing_records, books, and patrons
         underTest.deleteAll();
         bookRepository.deleteAll();
         patronRepository.deleteAll();
@@ -45,9 +45,9 @@ public class BorrowingRecordEntityRepositoryIntegrationTests {
 
     @Test
     public void testThatBorrowingRecordCanBeCreatedAndRecalled() {
+        // Given
         BookEntity bookEntity = TestDataUtil.createTestBookEntityB();
         PatronEntity patronEntity = TestDataUtil.createTestPatronEntityA();
-
         bookRepository.save(bookEntity);
         patronRepository.save(patronEntity);
 
@@ -57,18 +57,20 @@ public class BorrowingRecordEntityRepositoryIntegrationTests {
                 .borrowingDate(LocalDate.now())
                 .build();
 
+        // When
         underTest.save(borrowingRecordEntity);
-
         Optional<BorrowingRecordEntity> result = underTest.findById(borrowingRecordEntity.getId());
+
+        // Then
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(borrowingRecordEntity);
     }
 
     @Test
     public void testThatBorrowingRecordCanBeUpdated() {
+        // Given
         BookEntity bookEntity = TestDataUtil.createTestBookEntityA();
         PatronEntity patronEntity = TestDataUtil.createTestPatronEntityA();
-
         bookRepository.save(bookEntity);
         patronRepository.save(patronEntity);
 
@@ -77,22 +79,23 @@ public class BorrowingRecordEntityRepositoryIntegrationTests {
                 .patron(patronEntity)
                 .borrowingDate(LocalDate.now())
                 .build();
-
         underTest.save(borrowingRecordEntity);
 
+        // When
         borrowingRecordEntity.setReturnDate(LocalDate.now());
         underTest.save(borrowingRecordEntity);
 
+        // Then
         Optional<BorrowingRecordEntity> result = underTest.findById(borrowingRecordEntity.getId());
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(borrowingRecordEntity);
     }
 
     @Test
-    public void testThatBorrowingRecordCanBeDeleted() {
+    public void testThatAllBorrowingRecordsCanBeDeleted() {
+        // Given
         BookEntity bookEntity = TestDataUtil.createTestBookEntityA();
         PatronEntity patronEntity = TestDataUtil.createTestPatronEntityA();
-
         bookRepository.save(bookEntity);
         patronRepository.save(patronEntity);
 
@@ -101,13 +104,15 @@ public class BorrowingRecordEntityRepositoryIntegrationTests {
                 .patron(patronEntity)
                 .borrowingDate(LocalDate.now())
                 .build();
-
         underTest.save(borrowingRecordEntity);
 
-        underTest.deleteById(borrowingRecordEntity.getId());
+        // When
+        underTest.deleteAll();
 
+        // Then
         Optional<BorrowingRecordEntity> result = underTest.findById(borrowingRecordEntity.getId());
         assertThat(result).isEmpty();
     }
 }
+
 
