@@ -67,7 +67,7 @@ public class BookController {
         }
 
         bookService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

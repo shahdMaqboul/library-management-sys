@@ -212,6 +212,6 @@ public class PatronControllerIntegrationTests {
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/api/patrons/" + savedPatron.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().isNoContent());
+        ).andExpect(MockMvcResultMatchers.status().isAccepted());
     }
 }
