@@ -1,14 +1,11 @@
 package com.library.management.model.dto;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
@@ -31,7 +28,7 @@ public class BookDto {
     @NotNull(message = "Publication year is mandatory")
     private Integer publicationYear;
 
-    @Size(min = 10, max = 13, message = "isbn should be valid")
+    @Size(min = 10, max = 13, message = "isbn should be valid (10-13 characters)")
     @NotBlank(message = "isbn is mandatory")
     @NotNull(message = "isbn is mandatory")
     private String isbn;

@@ -2,6 +2,8 @@ package com.library.management.model.entities;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,12 +25,15 @@ public class BorrowingRecordEntity {
 
     @ManyToOne
     @JoinColumn(name = "book_id", referencedColumnName = "id")
+    @Valid
     private BookEntity book;
 
     @ManyToOne
     @JoinColumn(name = "patron_id")
+    @Valid
     private PatronEntity patron;
 
+    @NotNull(message = "Borrowing date is mandatory")
     private LocalDate borrowingDate;
 
     private LocalDate returnDate;
