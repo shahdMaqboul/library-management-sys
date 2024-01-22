@@ -230,7 +230,7 @@ public class BookControllerIntegrationTests {
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/api/books/" + savedBook.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().isAccepted());
+        ).andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
 }
